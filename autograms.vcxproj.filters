@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{3615ad07-2d51-497a-9b33-22221a22dc1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\core">
+      <UniqueIdentifier>{51c356f2-072d-439c-91b7-cdc3be923da0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\utils">
+      <UniqueIdentifier>{3f8fc529-b69e-4686-b885-66fdbf946cf0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\utils\clock.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\utils\number_converter.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\utils\distribution.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\utils\table.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\utils\execution_state.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\utils\uncopyable.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\autogram_solver.hpp">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\autogram_solver_helper.hpp">
+      <Filter>source\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
