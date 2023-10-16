@@ -9,6 +9,7 @@
 #include <string>
 
 #include "core/autogram_solver_helper.hpp"
+
 #include "utils/clock.hpp"
 
 int main( int argc, char **argv )

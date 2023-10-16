@@ -1,14 +1,15 @@
 #pragma once
 
 #include <algorithm>
-#include <atomic>
 #include <cctype>
 #include <exception>
 #include <locale>
 #include <string>
 #include <thread>
 
-#include "../core/autogram_solver.hpp"
+#include "autogram_solver.hpp"
+
+#include "../utils/atomic_bool_wrapper.hpp"
 #include "../utils/uncopyable.hpp"
 
 class autogram_solver_helper : public uncopyable
@@ -30,7 +31,7 @@ class autogram_solver_helper : public uncopyable
 
             std::exception_ptr e_ptr;
 
-            std::atomic< bool > is_running = true;
+            atomic_bool_wrapper is_running( true );
 
             int processor_count = static_cast< int >( std::thread::hardware_concurrency() );
 
@@ -56,7 +57,7 @@ class autogram_solver_helper : public uncopyable
                         e_ptr = std::current_exception();
                     }
 
-                    is_running = false;
+                    is_running.set_false();
                 }
 
                 #pragma omp critical

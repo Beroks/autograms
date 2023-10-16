@@ -1,10 +1,10 @@
 #pragma once
 
 #include <algorithm>
-#include <atomic>
 #include <sstream>
 #include <string>
 
+#include "../utils/atomic_bool_wrapper.hpp"
 #include "../utils/distribution.hpp"
 #include "../utils/execution_state.hpp"
 #include "../utils/number_converter.hpp"
@@ -24,7 +24,7 @@ class autogram_solver : public uncopyable
 {
     public:
 
-        explicit autogram_solver( int seed, std::atomic_bool *is_running = nullptr )
+        explicit autogram_solver( int seed, atomic_bool_wrapper *is_running = nullptr )
             : m_distribution( seed )
             , m_execution_state( is_running )
         {
