@@ -17,6 +17,18 @@ class number_converter : public uncopyable
 
     public:
 
+        int min_value() const
+        {
+            return 0;
+        }
+
+        int max_value() const
+        {
+            return static_cast< int >( m_lut.size() ) - 1;
+        }
+
+    public:
+
         std::string operator ()( int number ) const
         {
             if ( number < 0 || number > static_cast< int >( m_lut.size() ) - 1 )
