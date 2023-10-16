@@ -34,6 +34,8 @@ class autogram_solver_helper : public uncopyable
 
             int processor_count = static_cast< int >( std::thread::hardware_concurrency() );
 
+            // Launch as many solvers as possible
+
             #pragma omp parallel for
             for ( int i = 0; i < processor_count; ++i )
             {

@@ -44,6 +44,7 @@ class autogram_solver : public uncopyable
             int error_threshold = 10;
 
             // Initialize the solution using random values
+
             std::string autogram = init( sentence, result_type, &error );
 
             int iterations = 0;
@@ -58,10 +59,13 @@ class autogram_solver : public uncopyable
                 int error_old = error;
 
                 // Update the solution
+
                 autogram = update( sentence, autogram, result_type, &error );
 
                 if ( error == 0 )
                 {
+                    // The correct solution has been found
+
                     result = autogram;
 
                     m_execution_state.stop();
@@ -73,7 +77,9 @@ class autogram_solver : public uncopyable
 
                     if ( error_counter > error_threshold )
                     {
+                        // The algorithm doesn't seem to converge
                         // Initialize the solution using random values
+
                         autogram = init( sentence, result_type, &error );
 
                         error_counter = 0;
