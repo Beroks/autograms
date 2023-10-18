@@ -29,7 +29,7 @@ class number_converter : public uncopyable
 
     public:
 
-        std::string operator ()( int number ) const
+        const std::string &operator ()( int number ) const
         {
             if ( number < 0 || number > static_cast< int >( m_lut.size() ) - 1 )
                 throw std::runtime_error( "number_converter : invalid input" );

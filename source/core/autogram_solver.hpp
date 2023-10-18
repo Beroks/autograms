@@ -160,8 +160,8 @@ class autogram_solver : public uncopyable
 
                 char c = static_cast< char >( i + static_cast< int >( 'a' ) );
 
-                m_buffer_string << m_number_converter( count ) << " " << c
-                                << ( count > 1 ? "'s" : "" );
+                m_buffer_string << m_number_converter( count )
+                                << " " << c << ( count > 1 ? "'s" : "" );
             }
 
             return error;

@@ -23,7 +23,7 @@ int main( int argc, char **argv )
     {
         std::string sentence = "this sentence contains";
 
-        int max_iterations = 1000000;
+        int max_iterations = 2000000;
 
         int result_type = autogram_solver::options::none;
 
@@ -59,7 +59,7 @@ int main( int argc, char **argv )
 
         if ( result.empty() )
         {
-            std::cout << "No valid solution found." << std::endl;
+            std::cout << "Sorry, no valid solution found." << std::endl;
         }
         else
         {
