@@ -44,7 +44,9 @@ class autogram_solver_helper : public uncopyable
 
                 try
                 {
-                    autogram_solver solver( i, &is_running );
+                    autogram_solver solver( i );
+
+                    solver.set_execution_state( &is_running );
 
                     autogram = solver.compute( check_sentence( sentence ),
                                                check_max_iterations( max_iterations ),
@@ -102,12 +104,12 @@ class autogram_solver_helper : public uncopyable
 
             switch ( result_type )
             {
-                case autogram::options::force_pangram:
-                    result_type_checked = autogram::options::force_pangram;
+                case autogram_solver::options::force_pangram:
+                    result_type_checked = autogram_solver::options::force_pangram;
                     break;
 
                 default:
-                    result_type_checked = autogram::options::none;
+                    result_type_checked = autogram_solver::options::none;
                     break;
             }
 

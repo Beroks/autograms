@@ -1,37 +1,39 @@
 #pragma once
 
 #include <algorithm>
-#include <sstream>
 #include <string>
 
 #include "../utils/atomic_bool_wrapper.hpp"
-#include "../utils/distribution.hpp"
+#include "../utils/buffer_string.hpp"
 #include "../utils/execution_state.hpp"
 #include "../utils/number_converter.hpp"
 #include "../utils/table.hpp"
 #include "../utils/uncopyable.hpp"
 
-namespace autogram
-{
-    enum options
-    {
-        none          = 1,
-        force_pangram = 2
-    };
-}
-
 class autogram_solver : public uncopyable
 {
     public:
 
-        explicit autogram_solver( int seed, atomic_bool_wrapper *is_running = nullptr )
-            : m_distribution( seed )
-            , m_execution_state( is_running )
+        enum options
+        {
+            none          = 1,
+            force_pangram = 2
+        };
+
+    public:
+
+        explicit autogram_solver( int seed )
+            : m_table( seed )
         {
 
         }
 
     public:
+
+        void set_execution_state( atomic_bool_wrapper *is_running )
+        {
+            m_execution_state.set( is_running );
+        }
 
         std::string compute( const std::string &sentence,
                              int max_iterations,
@@ -39,13 +41,13 @@ class autogram_solver : public uncopyable
         {
             std::string result;
 
-            int error           = 0;
-            int error_counter   = 0;
-            int error_threshold = 10;
+            int error             = 0;
+            int error_counter     = 0;
+            int error_counter_max = 2;
 
             // Initialize the solution using random values
 
-            std::string autogram = init( sentence, result_type, &error );
+            error = initialize( sentence, result_type );
 
             int iterations = 0;
 
@@ -56,31 +58,31 @@ class autogram_solver : public uncopyable
                 if ( iterations > max_iterations )
                     break;
 
-                int error_old = error;
+                int error_prev = error;
 
                 // Update the solution
 
-                autogram = update( sentence, autogram, result_type, &error );
+                error = update( sentence, result_type );
 
                 if ( error == 0 )
                 {
                     // The correct solution has been found
 
-                    result = autogram;
+                    result = m_buffer_string.value();
 
                     m_execution_state.stop();
                 }
                 else
                 {
-                    if ( error >= error_old )
+                    if ( error >= error_prev )
                         error_counter++;
 
-                    if ( error_counter > error_threshold )
+                    if ( error_counter > error_counter_max )
                     {
                         // The algorithm doesn't seem to converge
                         // Initialize the solution using random values
 
-                        autogram = init( sentence, result_type, &error );
+                        error = initialize( sentence, result_type );
 
                         error_counter = 0;
                     }
@@ -92,43 +94,38 @@ class autogram_solver : public uncopyable
 
     private:
 
-        const std::string init( const std::string &sentence,
-                                int result_type,
-                                int *error )
+        int initialize( const std::string &sentence, int result_type )
         {
-            return update( sentence, "", result_type, error );
+            m_buffer_string = "";
+
+            return update( sentence, result_type );
         }
 
-        const std::string update( const std::string &sentence,
-                                  const std::string &autogram,
-                                  int result_type,
-                                  int *error )
+        int update( const std::string &sentence, int result_type )
         {
-            if ( autogram.empty() )
+            int error = 0;
+
+            if ( m_buffer_string.empty() )
             {
-                int offset = result_type == autogram::options::force_pangram ? 1 : 0;
+                int offset = result_type == autogram_solver::options::force_pangram ? 1 : 0;
 
                 int v_sum = 0;
 
                 while ( v_sum == 0 )
                 {
-                    m_table.random( m_distribution, offset );
+                    m_table.random( offset );
 
                     v_sum = m_table.sum();
                 }
 
-                if ( error != nullptr )
-                    *error = static_cast< int >( m_table.size() * 1000 );
+                error = static_cast< int >( m_table.size() * 1000 );
             }
             else
             {
-                if ( error != nullptr )
-                    m_table.backup();
+                m_table.backup();
+                m_table.update( m_buffer_string.value() );
 
-                m_table.update( autogram );
-
-                if ( error != nullptr )
-                    *error = m_table.error();
+                error = m_table.error();
             }
 
             int idx_min = m_table.size() - 1;
@@ -145,9 +142,7 @@ class autogram_solver : public uncopyable
                 idx_max = std::max( idx_max, i );
             }
 
-            std::stringstream buf;
-
-            buf << sentence;
+            m_buffer_string = sentence;
 
             for ( int i = 0; i < m_table.size(); ++i )
             {
@@ -157,27 +152,25 @@ class autogram_solver : public uncopyable
                     continue;
 
                 if ( i == idx_min )
-                    buf << " ";
+                    m_buffer_string << " ";
                 else if ( i == idx_max )
-                    buf << " and ";
+                    m_buffer_string << " and ";
                 else
-                    buf << ", ";
+                    m_buffer_string << ", ";
 
                 char c = static_cast< char >( i + static_cast< int >( 'a' ) );
 
-                buf << m_number_converter( count ) << " " << c << ( count > 1 ? "'s" : "" );
+                m_buffer_string << m_number_converter( count ) << " " << c
+                                << ( count > 1 ? "'s" : "" );
             }
 
-            return buf.str();
+            return error;
         }
 
     private:
 
-        distribution m_distribution;
-
-        execution_state m_execution_state;
-
+        buffer_string    m_buffer_string;
+        execution_state  m_execution_state;
         number_converter m_number_converter;
-
-        table m_table;
+        table            m_table;
 };

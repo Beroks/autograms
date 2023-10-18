@@ -25,6 +25,7 @@
     <ClInclude Include="source\core\autogram_solver.hpp" />
     <ClInclude Include="source\core\autogram_solver_helper.hpp" />
     <ClInclude Include="source\utils\atomic_bool_wrapper.hpp" />
+    <ClInclude Include="source\utils\buffer_string.hpp" />
     <ClInclude Include="source\utils\clock.hpp" />
     <ClInclude Include="source\utils\distribution.hpp" />
     <ClInclude Include="source\utils\execution_state.hpp" />

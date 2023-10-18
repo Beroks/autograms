@@ -24,11 +24,11 @@ Per avviare il programma da linea di comando si deve utilizzare la seguente sint
 
 Parametri:
 * `sentence         ` ~ Frase da analizzare.
-* `-i max iterations` ~ Aumenta il numero massimo di iterazioni (opzionale, default 500000).
+* `-i max iterations` ~ Aumenta il numero massimo di iterazioni (opzionale, default 1000000).
 * `-o force-pangram ` ~ Forza la ricerca di un autogramma che sia anche un pangramma (opzionale).
 
 Esempi di utilizzo:
 * `autograms.exe` `"this sentence contains"`
-* `autograms.exe` `"this sentence contains"` `-i 1000000`
+* `autograms.exe` `"this sentence contains"` `-i 2000000`
 * `autograms.exe` `"this sentence contains"` `-o force-pangram`
-* `autograms.exe` `"this sentence contains"` `-i 1000000` `-o force-pangram`
+* `autograms.exe` `"this sentence contains"` `-i 2000000` `-o force-pangram`

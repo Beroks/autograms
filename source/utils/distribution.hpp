@@ -12,14 +12,14 @@ class distribution : public uncopyable
         {
             m_number_generator.seed( seed );
 
-            m_distribution = std::uniform_int_distribution< int >( 0, 9 );
+            m_distribution = std::uniform_int_distribution< int >( 0, 10000000 );
         }
 
     public:
 
-        int operator ()( int offset = 0 )
+        int operator ()( int max_value )
         {
-            return m_distribution( m_number_generator ) + offset;
+            return m_distribution( m_number_generator ) % max_value;
         }
 
     private:

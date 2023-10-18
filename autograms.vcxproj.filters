@@ -44,5 +44,8 @@
     <ClInclude Include="source\utils\atomic_bool_wrapper.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
+    <ClInclude Include="source\utils\buffer_string.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

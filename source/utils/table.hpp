@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <string>
@@ -12,7 +13,8 @@ class table : public uncopyable
 {
     public:
 
-        table()
+        explicit table( int seed )
+            : m_distribution( seed )
         {
             int table_size = static_cast< int >( 'z' ) - static_cast< int >( 'a' ) + 1;
 
@@ -80,13 +82,23 @@ class table : public uncopyable
             }
         }
 
-        void random( distribution &d, int offset )
+        void random( int offset )
         {
-            for ( int i = 0; i < size(); ++i )
-                m_table[ i ][ 0 ] = d( offset );
+            if ( offset == 0 )
+            {
+                for ( int i = 0; i < size(); ++i )
+                    m_table[ i ][ 0 ] = std::max( 0, m_distribution( 100 ) - 80 );
+            }
+            else
+            {
+                for ( int i = 0; i < size(); ++i )
+                    m_table[ i ][ 0 ] = m_distribution( 50 ) + offset;
+            }
         }
 
     private:
+
+        distribution m_distribution;
 
         std::vector< std::array< int, 2 > > m_table;
 };

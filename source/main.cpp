@@ -23,9 +23,9 @@ int main( int argc, char **argv )
     {
         std::string sentence = "this sentence contains";
 
-        int max_iterations = 500000;
+        int max_iterations = 1000000;
 
-        int result_type = autogram::options::none;
+        int result_type = autogram_solver::options::none;
 
         if ( argc > 1 )
         {
@@ -43,8 +43,8 @@ int main( int argc, char **argv )
 
                     if ( std::string( argv[ idx1 ] ) == "-o" )
                         result_type = std::string( argv[ idx2 ] ) == "force-pangram"
-                                      ? autogram::options::force_pangram
-                                      : autogram::options::none;
+                                      ? autogram_solver::options::force_pangram
+                                      : autogram_solver::options::none;
                 }
             }
         }
