@@ -59,7 +59,7 @@ int main( int argc, char **argv )
 
         if ( result.empty() )
         {
-            std::cout << "Sorry, no valid solution found." << std::endl;
+            std::cout << "Sorry, no valid solution has been found." << std::endl;
         }
         else
         {

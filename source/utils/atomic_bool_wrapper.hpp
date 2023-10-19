@@ -2,7 +2,9 @@
 
 #include <atomic>
 
-class atomic_bool_wrapper
+#include "uncopyable.hpp"
+
+class atomic_bool_wrapper : public uncopyable
 {
     public:
 

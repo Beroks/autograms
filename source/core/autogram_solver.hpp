@@ -1,6 +1,10 @@
 #pragma once
 
 #include <algorithm>
+#include <cctype>
+#include <locale>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 
 #include "../utils/atomic_bool_wrapper.hpp"
@@ -30,14 +34,81 @@ class autogram_solver : public uncopyable
 
     public:
 
+        std::string compute( const std::string &sentence,
+                             int max_iterations,
+                             int result_type )
+        {
+            // Clean up the parameters and start the solver
+
+            return run( check_sentence( sentence ),
+                        check_max_iterations( max_iterations ),
+                        check_result_type( result_type ) );
+        }
+
         void set_execution_state( atomic_bool_wrapper *is_running )
         {
             m_execution_state.set( is_running );
         }
 
-        std::string compute( const std::string &sentence,
-                             int max_iterations,
-                             int result_type )
+    private:
+
+        std::string check_sentence( const std::string &sentence ) const
+        {
+            std::string sentence_checked;
+
+            std::stringstream buf( sentence );
+
+            buf >> sentence_checked;
+
+            std::string token;
+
+            while ( buf >> token )
+                sentence_checked += " " + token;
+
+            for ( auto &c : sentence_checked )
+                c = std::tolower( c, std::locale() );
+
+            if ( sentence_checked.empty() )
+                throw std::runtime_error( "autogram_solver : invalid input" );
+
+            return sentence_checked;
+        }
+
+        int check_max_iterations( int max_iterations ) const
+        {
+            int max_iterations_checked;
+
+            max_iterations_checked = std::max( max_iterations, 0 );
+
+            if ( max_iterations_checked == 0 )
+                throw std::runtime_error( "autogram_solver : invalid input" );
+
+            return max_iterations_checked;
+        }
+
+        int check_result_type( int result_type ) const
+        {
+            int result_type_checked;
+
+            switch ( result_type )
+            {
+                case autogram_solver::options::force_pangram:
+                    result_type_checked = autogram_solver::options::force_pangram;
+                    break;
+
+                default:
+                    result_type_checked = autogram_solver::options::none;
+                    break;
+            }
+
+            return result_type_checked;
+        }
+
+    private:
+
+        std::string run( const std::string &sentence,
+                         int max_iterations,
+                         int result_type )
         {
             std::string result;
 
@@ -91,8 +162,6 @@ class autogram_solver : public uncopyable
 
             return result;
         }
-
-    private:
 
         int initialize( const std::string &sentence, int result_type )
         {
