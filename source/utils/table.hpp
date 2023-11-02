@@ -1,20 +1,18 @@
 #pragma once
 
-#include <algorithm>
 #include <array>
 #include <cmath>
+#include <functional>
 #include <string>
 #include <vector>
 
-#include "distribution.hpp"
 #include "uncopyable.hpp"
 
 class table : public uncopyable
 {
     public:
 
-        explicit table( int seed )
-            : m_distribution( seed )
+        explicit table()
         {
             int table_size = static_cast< int >( 'z' ) - static_cast< int >( 'a' ) + 1;
 
@@ -82,23 +80,13 @@ class table : public uncopyable
             }
         }
 
-        void random( int offset )
+        void random( const std::function< int ( void ) > &f )
         {
-            if ( offset == 0 )
-            {
-                for ( int i = 0; i < size(); ++i )
-                    m_table[ i ][ 0 ] = std::max( 0, m_distribution( 100 ) - 80 );
-            }
-            else
-            {
-                for ( int i = 0; i < size(); ++i )
-                    m_table[ i ][ 0 ] = m_distribution( 50 ) + offset;
-            }
+            for ( int i = 0; i < size(); ++i )
+                m_table[ i ][ 0 ] = f();
         }
 
     private:
-
-        distribution m_distribution;
 
         std::vector< std::array< int, 2 > > m_table;
 };

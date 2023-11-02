@@ -30,12 +30,12 @@ class autogram_solver_helper : public uncopyable
 
             atomic_bool_wrapper is_running( true );
 
-            int processor_count = static_cast< int >( std::thread::hardware_concurrency() );
+            int number_of_threads = static_cast< int >( std::thread::hardware_concurrency() );
 
             // Launch as many solvers as possible
 
             #pragma omp parallel for
-            for ( int i = 0; i < processor_count; ++i )
+            for ( int i = 0; i < number_of_threads; ++i )
             {
                 std::string autogram;
 

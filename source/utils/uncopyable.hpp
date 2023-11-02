@@ -11,15 +11,9 @@ class uncopyable
 
     private:
 
-        uncopyable( const uncopyable & )
-        {
-
-        }
+        uncopyable( const uncopyable & ) = delete;
 
     private:
 
-        uncopyable &operator =( const uncopyable & )
-        {
-            return *this;
-        }
+        uncopyable &operator =( const uncopyable & ) = delete;
 };

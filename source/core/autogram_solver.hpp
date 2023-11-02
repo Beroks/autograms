@@ -9,6 +9,7 @@
 
 #include "../utils/atomic_bool_wrapper.hpp"
 #include "../utils/buffer_string.hpp"
+#include "../utils/distribution.hpp"
 #include "../utils/execution_state.hpp"
 #include "../utils/number_converter.hpp"
 #include "../utils/table.hpp"
@@ -27,7 +28,7 @@ class autogram_solver : public uncopyable
     public:
 
         explicit autogram_solver( int seed )
-            : m_table( seed )
+            : m_distribution( seed )
         {
 
         }
@@ -176,13 +177,32 @@ class autogram_solver : public uncopyable
 
             if ( m_buffer_string.empty() )
             {
-                int offset = result_type == autogram_solver::options::force_pangram ? 1 : 0;
-
                 int v_sum = 0;
 
                 while ( v_sum == 0 )
                 {
-                    m_table.random( offset );
+                    if ( result_type == autogram_solver::options::force_pangram )
+                    {
+                        auto f = [ &d = m_distribution ]()
+                        {
+                            int r = d( 50 ) + 1;
+
+                            return r;
+                        };
+
+                        m_table.random( f );
+                    }
+                    else
+                    {
+                        auto f = [ &d = m_distribution ]()
+                        {
+                            int r = std::max( 0, d( 100 ) - 80 );
+
+                            return r == 1 ? 0 : r;
+                        };
+
+                        m_table.random( f );
+                    }
 
                     v_sum = m_table.sum();
                 }
@@ -239,6 +259,7 @@ class autogram_solver : public uncopyable
     private:
 
         buffer_string    m_buffer_string;
+        distribution     m_distribution;
         execution_state  m_execution_state;
         number_converter m_number_converter;
         table            m_table;
