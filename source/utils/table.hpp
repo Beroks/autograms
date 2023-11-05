@@ -69,7 +69,7 @@ class table : public uncopyable
         {
             reset();
 
-            for ( auto &c : sentence )
+            for ( const auto &c : sentence )
             {
                 if ( c < 'a' || c > 'z' )
                     continue;

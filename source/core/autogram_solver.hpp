@@ -196,9 +196,9 @@ class autogram_solver : public uncopyable
                     {
                         auto f = [ &d = m_distribution ]()
                         {
-                            int r = std::max( 0, d( 100 ) - 80 );
+                            int r = d( 100 ) - 80;
 
-                            return r == 1 ? 0 : r;
+                            return r <= 1 ? 0 : r;
                         };
 
                         m_table.random( f );
